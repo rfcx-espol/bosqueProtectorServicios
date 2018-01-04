@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/audio"
+        android:orderInCategory="1"
+        android:title="@string/audio"
+        />
+
+    <item
+        android:id="@+id/photos"
+        android:orderInCategory="2"
+        android:title="@string/photo"
+        />
+
+    <item
+        android:id="@+id/sensors"
+        android:orderInCategory="3"
+        android:title="@string/sensors"
+        />
+
+
 
 </menu>
