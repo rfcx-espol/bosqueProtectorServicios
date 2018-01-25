@@ -107,7 +107,7 @@ public class SendingAudiosService extends Service {
         Log.i(TAG, "esta es carpeta: " + Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio");
         //iteratingFolders( new File(Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio"));
         FolderIterator folderIterator = new FolderIterator();
-        folderIterator.iteratingFolders(TAG,url, new File(Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio"),okHttpClient);
+        //folderIterator.iteratingFolders(TAG,url, new File(Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio"),okHttpClient);
 
     }
     /*

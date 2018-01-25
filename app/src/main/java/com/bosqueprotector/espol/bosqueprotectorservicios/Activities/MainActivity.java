@@ -66,12 +66,16 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.audio:
+                /*
                 Log.i(TAG, "este es audio");
                  if (mBoundAudioService){
                      senderAudio.printImConnected();
                  }else{
                      Log.i(TAG, "no se pudo hace conexion");
                  }
+                 */
+                Intent prefsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(prefsIntent);
                 break;
 
             case R.id.photos:

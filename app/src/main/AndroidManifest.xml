@@ -19,6 +19,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".Activities.SettingsActivity" >
+        </activity>
+
         <service android:enabled="true" android:name=".Services.SendingAudiosService" />
     </application>
 
