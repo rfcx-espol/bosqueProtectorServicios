@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.bosqueprotector.espol.bosqueprotectorservicios.R;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Services.SendingAudiosService;
+import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers;
 
 public class MainActivity extends AppCompatActivity {
     /*
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initializingVariables(getApplicationContext());
         setContentView(R.layout.activity_main);
     }
 
@@ -45,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
         // Bind to LocalService
 
         Intent intentServiceAudio = new Intent(this, SendingAudiosService.class);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         startService(intentServiceAudio);
         bindService(intentServiceAudio, mConnection, Context.BIND_AUTO_CREATE);
     }
@@ -101,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
             mBoundAudioService = false;
         }
     };
+
+    private void initializingVariables(Context context){
+        Identifiers.setIdApplication(context);
+    }
 
 
 }
