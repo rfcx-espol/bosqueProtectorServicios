@@ -26,7 +26,7 @@
         android:key="isOnService"
         android:title="Is Service running"
         android:enabled="true"
-        android:summary="checkbox to turn off or on the service of sneding audios to the server"
+        android:summary="checkbox to turn off or on the service of sending audios to the server"
         android:defaultValue="true" />
 
     <CheckBoxPreference

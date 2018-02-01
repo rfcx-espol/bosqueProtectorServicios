@@ -4,7 +4,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +16,8 @@ import android.view.MenuItem;
 import com.bosqueprotector.espol.bosqueprotectorservicios.R;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Services.SendingAudiosService;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers;
+
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.IS_ON_SERVICE;
 
 public class MainActivity extends AppCompatActivity {
     /*
@@ -46,14 +50,17 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // Bind to LocalService
 
-        Intent intentServiceAudio = new Intent(this, SendingAudiosService.class);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (IS_ON_SERVICE){
+            Intent intentServiceAudio = new Intent(this, SendingAudiosService.class);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            startService(intentServiceAudio);
+            bindService(intentServiceAudio, mConnection, Context.BIND_AUTO_CREATE);
         }
-        startService(intentServiceAudio);
-        bindService(intentServiceAudio, mConnection, Context.BIND_AUTO_CREATE);
+
     }
 
 
@@ -66,14 +73,14 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.audio:
-                /*
+
                 Log.i(TAG, "este es audio");
                  if (mBoundAudioService){
                      senderAudio.printImConnected();
                  }else{
                      Log.i(TAG, "no se pudo hace conexion");
                  }
-                 */
+
                 Intent prefsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(prefsIntent);
                 break;
@@ -115,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializingVariables(Context context){
         Identifiers.setIdApplication(context);
+        Identifiers.setPreferencesApplications(context);
     }
 
 

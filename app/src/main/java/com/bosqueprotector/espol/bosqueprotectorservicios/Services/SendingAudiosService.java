@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Pattern;
 
 import okhttp3.Call;
@@ -38,6 +40,8 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SENDING_AUDIO_TIME;
+
 /**
  * Created by joset on 16/01/2018.
  */
@@ -47,9 +51,9 @@ public class SendingAudiosService extends Service {
     /*
     * Tags
      */
-    private  final String url ="http://200.126.1.156:5000/gzip/UploadFile";
+    //private  final String url ="http://200.126.1.156/gzip/UploadFile";
     //private  final String url ="http://10.0.2.2:3000/upload";
-    //private  final String url ="http://10.10.1.129:3000/upload";
+    private  final String url ="http://192.168.183.234:3000/upload";
     private int counter = 0;
     private static final String TAG = SendingAudiosService.class.getSimpleName();
     OkHttpClient okHttpClient = new OkHttpClient();
@@ -106,104 +110,32 @@ public class SendingAudiosService extends Service {
     public void startSendingAudios(){
         Log.i(TAG, "esta es carpeta: " + Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio");
         //iteratingFolders( new File(Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio"));
-        FolderIterator folderIterator = new FolderIterator();
-        //folderIterator.iteratingFolders(TAG,url, new File(Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio"),okHttpClient);
+        //FolderIterator folderIterator = new FolderIterator();
+        //folderIterator.iteratingFolders(TAG,url, new File(Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio/"),okHttpClient);
+        //Declare the timer
 
-    }
-    /*
-    public void iteratingFolders (File dir) {
+        Timer t = new Timer();
+        //Set the schedule function and rate
+                t.scheduleAtFixedRate(new TimerTask() {
 
-        if (dir.exists()) {
-            File[] files = dir.listFiles();
-            for (int i = 0; i < files.length; ++i) {
-                File file = files[i];
-                Log.i(TAG, "este es el archivo1 : " + file.toString());
-                if (file.isDirectory()) {
-                    iteratingFolders(file);
-                } else {
-                    while (counter < 7) {
-                        Log.i(TAG, "este es el archivo2 : " + file.toString());
-                        //boolean respuesta = sendHttpRequestIntentoEnvio(url, file);
-                        boolean respuesta = uploadFile(url, file);
-                        if (respuesta) {
-                            Log.i(TAG, "file uploaded: " + file.toString());
+                    @Override
+                    public void run() {
+                        Log.i(TAG, "enter in the timer\n ");
+                        FolderIterator folderIterator = new FolderIterator();
+                        folderIterator.iteratingFolders(TAG,url, new File(Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio/"),okHttpClient);
 
-                        } else {
-
-                            Log.i(TAG, "no funciono amiguito para: " + file.toString() + " :(");
-                        }
-                        Log.i(TAG, "el contador: " + counter);
-                        counter++;
                     }
-                }
-            }
-        }
+
+                },
+        //Set how long before to start calling the TimerTask (in milliseconds)
+        200,
+        //Set the amount of time between each execution (in milliseconds)
+                        SENDING_AUDIO_TIME*1000);
+
+
+
     }
-    */
-    /*
-    private boolean sendHttpRequestIntentoEnvio(String url, File file) {
-        try {
-            HttpClient httpclient = new DefaultHttpClient();
 
-            HttpPost httppost = new HttpPost(url);
-
-            MultipartEntity multipartEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-            multipartEntity.addPart("file", new FileBody(file));
-            httppost.setEntity(multipartEntity);
-
-            //InputStreamEntity reqEntity = new InputStreamEntity(
-            //new FileInputStream(file), -1);
-            //httppost.addHeader("Content-Encoding", "gzip");
-            //Content-Type: multipart/form-data
-            //reqEntity.setContentType("undefined");
-            //httppost.addHeader("Content-Encoding", "gzip");
-            //reqEntity.setChunked(true); // Send in multiple parts if needed
-            //httppost.setEntity(reqEntity);
-            HttpResponse response = httpclient.execute(httppost);
-            Log.i(TAG, "look if its working: " + file.toString());
-
-            return true;
-            //Do something with response...
-
-        } catch (Exception e) {
-
-            Log.i(TAG, e.toString());
-
-            return false;
-            // show error
-        }
-    }
-    */
-    /*
-    public boolean uploadFile(String url, File file){
-
-        String[] splitter = file.toString().split(Pattern.quote(File.separator));
-        String filename = splitter[splitter.length-1];
-
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("nombreArchivo", filename)
-                .addFormDataPart("idApplication", Identifiers.ID_APPLICATION)
-                .addFormDataPart("file", filename, RequestBody.create(MediaType.parse("application/octet-stream"), file))
-                .build();
-        Request request = new Request.Builder()
-                .url(url)
-                .post(requestBody)
-                .build();
-
-        Call call = okHttpClient.newCall(request);
-        Response response = null;
-        try {
-            response = call.execute();
-            Log.i(TAG, "este es mensaje: " + response.body().string());
-            return true;
-
-        }catch(IOException e){
-            e.printStackTrace();
-            return false;
-        }
-    }
-    */
 
 
 

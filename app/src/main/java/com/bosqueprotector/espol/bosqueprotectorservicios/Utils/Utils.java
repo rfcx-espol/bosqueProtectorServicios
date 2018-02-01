@@ -28,7 +28,7 @@ public class Utils {
 
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("fileName", filename)
+                .addFormDataPart("filename", filename)
                 .addFormDataPart("deviceId", Identifiers.ID_APPLICATION)
                 .addFormDataPart("file", filename, RequestBody.create(MediaType.parse("application/octet-stream"), file))
                 .build();
@@ -41,6 +41,7 @@ public class Utils {
         Response response = null;
         try {
             response = call.execute();
+            Log.i(TAG, "este es :" + Identifiers.ID_APPLICATION);
             Log.i(TAG, "este es mensaje: " + response.body().string());
             return true;
 

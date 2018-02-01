@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import okhttp3.OkHttpClient;
 
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.ON_DESTROY_AUDIO;
+
 /**
  * Created by joset on 23/01/2018.
  */
@@ -47,15 +49,16 @@ public class FolderIterator {
                                 if (respuesta) {
                                     Log.i(TAG, "file uploaded in intent " + intentsOfUpload+ ": " + file.toString());
                                     this.routesRecurred.add(file.toString());
+                                    if (ON_DESTROY_AUDIO ){
+                                        boolean isDeleted = file.delete();
+                                        if (isDeleted){
+                                            Log.i(TAG, "file deleted succesfully!");
+                                        }else{
+                                            Log.i(TAG, "file couldn't be deleted");
+                                        }
+
+                                    }
                                     break;
-                                /*
-                                boolean isDeleted = file.delete();
-                                if (isDeleted){
-                                    Log.i(TAG, "se elimino");
-                                }else{
-                                    Log.i(TAG, "no se elimino");
-                                }
-                                */
 
                                 } else {
 
@@ -83,50 +86,5 @@ public class FolderIterator {
 
     }
 
-    public void iteratingFolders2(String TAG, String url, File dir, OkHttpClient okHttpClient) {
-        if (dir.exists()) {
-            File[] files = dir.listFiles(); //give month folders
-            for (int i = 0; i <files.length; i++){
-                File[] files2 = files[i].listFiles(); //inside it is each file
-                for (int j = 0; j <files2.length;j++){
-                    File[] files3 = files2[j].listFiles();
-                    for (int k = 0; k < files3.length; k++){
-                        File specificFile = files3[k];
-                        //while (this.counter < 7) {
-                            Log.i(TAG, "este es el archivo2 : " + specificFile.toString());
-                            //boolean respuesta = sendHttpRequestIntentoEnvio(url, file);
-                            if(!routesRecurred.contains(specificFile.toString())){
-                                boolean respuesta = Utils.uploadFile(TAG, url, specificFile, okHttpClient);
-                                if (respuesta) {
-                                    Log.i(TAG, "file uploaded: " + specificFile.toString());
-                                    this.routesRecurred.add(specificFile.toString());
-                                    /*
-                                    boolean isDeleted = specificFile.delete();
-                                    if (isDeleted){
-                                        Log.i(TAG, "se elimino");
-                                    }else{
-                                        Log.i(TAG, "no se elimino");
-                                    }
-                                    */
-
-                                } else {
-
-                                    Log.i(TAG, "no funciono amiguito para: " + specificFile.toString() + " :(");
-                                }
-                                this.counter++;
-                                Log.i(TAG, "el contador: " + counter);
-                                //this.counter++;
-
-                            }
-
-                        //}
-
-                    }
-
-                }
-            }
-        }
-
-    }
 
 }
