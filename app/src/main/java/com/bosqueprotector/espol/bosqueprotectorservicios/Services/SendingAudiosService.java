@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -40,6 +41,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.IS_BOUNDED_AUDIO_SERVICE;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SENDING_AUDIO_TIME;
 
 /**
@@ -53,10 +55,11 @@ public class SendingAudiosService extends Service {
      */
     //private  final String url ="http://200.126.1.156/gzip/UploadFile";
     //private  final String url ="http://10.0.2.2:3000/upload";
-    private  final String url ="http://192.168.183.234:3000/upload";
+    private  final String url ="http://10.10.1.126:3000/upload";
     private int counter = 0;
     private static final String TAG = SendingAudiosService.class.getSimpleName();
     OkHttpClient okHttpClient = new OkHttpClient();
+    final Handler handler = new Handler();
     @Nullable
     //
     /**
@@ -120,15 +123,23 @@ public class SendingAudiosService extends Service {
 
                     @Override
                     public void run() {
-                        Log.i(TAG, "enter in the timer\n ");
-                        FolderIterator folderIterator = new FolderIterator();
-                        folderIterator.iteratingFolders(TAG,url, new File(Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio/"),okHttpClient);
+
+                        handler.post(new Runnable() {
+                            public void run() {
+                                 if(IS_BOUNDED_AUDIO_SERVICE){// check net connection
+                                                          //what u want to do....
+                                     FolderIterator folderIterator = new FolderIterator();
+                                     folderIterator.iteratingFolders(TAG,url, new File(Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio/"),okHttpClient);
+                                 }
+
+                            }
+                        });
 
                     }
 
                 },
         //Set how long before to start calling the TimerTask (in milliseconds)
-        200,
+        1000,
         //Set the amount of time between each execution (in milliseconds)
                         SENDING_AUDIO_TIME*1000);
 

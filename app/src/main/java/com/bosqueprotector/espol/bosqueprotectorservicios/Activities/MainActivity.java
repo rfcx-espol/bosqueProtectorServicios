@@ -17,6 +17,7 @@ import com.bosqueprotector.espol.bosqueprotectorservicios.R;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Services.SendingAudiosService;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers;
 
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.IS_BOUNDED_AUDIO_SERVICE;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.IS_ON_SERVICE;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     *
     */
     SendingAudiosService senderAudio;
-    boolean mBoundAudioService = false;
     /**/
 
     @Override
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.audio:
 
                 Log.i(TAG, "este es audio");
-                 if (mBoundAudioService){
+                 if (IS_BOUNDED_AUDIO_SERVICE){
                      senderAudio.printImConnected();
                  }else{
                      Log.i(TAG, "no se pudo hace conexion");
@@ -111,12 +111,12 @@ public class MainActivity extends AppCompatActivity {
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             SendingAudiosService.LocalBinder binder = (SendingAudiosService.LocalBinder) service;
             senderAudio = binder.getService();
-            mBoundAudioService = true;
+            IS_BOUNDED_AUDIO_SERVICE = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            mBoundAudioService = false;
+            IS_BOUNDED_AUDIO_SERVICE= false;
         }
     };
 

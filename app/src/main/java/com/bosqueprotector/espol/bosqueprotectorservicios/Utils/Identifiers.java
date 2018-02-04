@@ -16,6 +16,7 @@ public class Identifiers {
     public static int SENDING_AUDIO_TIME;
     public static boolean IS_ON_SERVICE;
     public static boolean ON_DESTROY_AUDIO;
+    public static boolean IS_BOUNDED_AUDIO_SERVICE = false;
     //public static
 
     public static void setIdApplication(Context context){
