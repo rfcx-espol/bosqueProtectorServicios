@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +45,25 @@ public class MainActivity extends AppCompatActivity {
         initializingVariables(getApplicationContext());
         setContentView(R.layout.activity_main);
     }
+    /*
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to LocalService
 
+        if (IS_ON_SERVICE){
+            Intent intentServiceAudio = new Intent(this, SendingAudiosService.class);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            startService(intentServiceAudio);
+            bindService(intentServiceAudio, mConnection, Context.BIND_AUTO_CREATE);
+        }
+
+    }
+    */
     @Override
     protected void onStart() {
         super.onStart();
