@@ -1,5 +1,6 @@
 package com.bosqueprotector.espol.bosqueprotectorservicios.Utils;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.io.File;
@@ -49,5 +50,10 @@ public class Utils {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static void initializingVariables(Context context){
+        Identifiers.setIdApplication(context);
+        Identifiers.setPreferencesApplications(context);
     }
 }

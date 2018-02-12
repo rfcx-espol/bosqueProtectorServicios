@@ -34,7 +34,7 @@ public class FolderIterator {
             File[] files = dir.listFiles();
             for (int i = 0; i < files.length; i++) {
                 File file = files[i];
-                Log.i(TAG, "este es el archivo1 : " + file.toString());
+                //Log.i(TAG, "este es el archivo1 : " + file.toString());
                 if (file.isDirectory()) {
                     iteratingFolders(TAG, url, file, okHttpClient);
                 } else {

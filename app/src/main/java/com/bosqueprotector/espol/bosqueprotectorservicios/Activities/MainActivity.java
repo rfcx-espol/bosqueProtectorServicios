@@ -17,11 +17,19 @@ import android.view.MenuItem;
 import com.bosqueprotector.espol.bosqueprotectorservicios.R;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Services.SendingAudiosService;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers;
+import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Utils;
+
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.IS_BOUNDED_AUDIO_SERVICE;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.IS_ON_SERVICE;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.PREFS_SETTINGS;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SENDING_AUDIO_TIME;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SERVICE_INTENT_AUDIO_SENDER;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     /*
     * Tags ce la clase
      */
@@ -31,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     *
     */
     SendingAudiosService senderAudio;
+    private boolean CONNECTION =true;
     /**/
 
     @Override
@@ -42,43 +51,62 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initializingVariables(getApplicationContext());
+        //Utils.initializingVariables(getApplicationContext());
+        Log.i(TAG, "binding service with main activity");
+        //bindService(SERVICE_INTENT_AUDIO_SENDER, mConnection, Context.BIND_AUTO_CREATE);
         setContentView(R.layout.activity_main);
     }
-    /*
+
     @Override
     protected void onStart() {
         super.onStart();
         // Bind to LocalService
-
-        if (IS_ON_SERVICE){
-            Intent intentServiceAudio = new Intent(this, SendingAudiosService.class);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        /*
+        if (CONNECTION) {
+            if (IS_ON_SERVICE){
+                Intent intentServiceAudio = new Intent(this, SendingAudiosService.class);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                startService(intentServiceAudio);
+                bindService(intentServiceAudio, mConnection, Context.BIND_AUTO_CREATE);
             }
-            startService(intentServiceAudio);
-            bindService(intentServiceAudio, mConnection, Context.BIND_AUTO_CREATE);
-        }
 
-    }
-    */
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Bind to LocalService
+        }else{
+            Timer t = new Timer();
 
-        if (IS_ON_SERVICE){
-            Intent intentServiceAudio = new Intent(this, SendingAudiosService.class);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            startService(intentServiceAudio);
-            bindService(intentServiceAudio, mConnection, Context.BIND_AUTO_CREATE);
+            t.scheduleAtFixedRate(new TimerTask() {
+
+                @Override
+                public void run() {
+
+                    if (IS_ON_SERVICE){
+                        Intent intentServiceAudio = new Intent(getApplicationContext(), SendingAudiosService.class);
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        startService(intentServiceAudio);
+                        bindService(intentServiceAudio, mConnection, Context.BIND_AUTO_CREATE);
+                    }
+
+
+
+
+                                      }
+
+                                  },
+                    //Set how long before to start calling the TimerTask (in milliseconds)
+                    1500,
+                    //Set the amount of time between each execution (in milliseconds)
+                    SENDING_AUDIO_TIME*1000);
+
         }
+        */
+
 
     }
 
@@ -139,10 +167,15 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private void initializingVariables(Context context){
-        Identifiers.setIdApplication(context);
-        Identifiers.setPreferencesApplications(context);
+    @Override
+    public synchronized void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String prefKey) {
+        Log.d(TAG, "Pref changed: "+prefKey+" = "+PREFS_SETTINGS.getString(prefKey, null));
+
     }
+
+
+
+
 
 
 }
