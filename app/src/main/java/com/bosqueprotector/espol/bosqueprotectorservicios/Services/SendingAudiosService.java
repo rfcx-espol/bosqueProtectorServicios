@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.FolderIterator;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers;
+import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Utils;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -86,10 +87,18 @@ public class SendingAudiosService extends Service {
     }
 
     @Override
+    public void onCreate(){
+        super.onCreate();
+        Utils.initializingVariables(getApplicationContext());
+
+    }
+
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "Received start id " + startId + ": " + intent);
 
-        startSendingAudiosTimer();
+        startSendingAudiosHandler();
         return START_STICKY;
     }
 
@@ -130,6 +139,43 @@ public class SendingAudiosService extends Service {
         1500,
         //Set the amount of time between each execution (in milliseconds)
         SENDING_AUDIO_TIME*1000);
+
+    }
+
+    public void startSendingAudiosHandler(){
+        Log.d(TAG, "IS_ON_SERVICE: " + IS_ON_SERVICE);
+        Log.d(TAG, "Type: handler");
+        //iteratingFolders( new File(Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio"));
+        //FolderIterator folderIterator = new FolderIterator();
+        //folderIterator.iteratingFolders(TAG,url, new File(Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio/"),okHttpClient);
+        //Declare the timer
+
+        final Handler handler = new Handler();
+        final Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                if(IS_ON_SERVICE){// check net connection
+                    //what u want to do....
+                    Runnable r2 = new Runnable() {
+                        @Override
+                        public void run() {
+                            FolderIterator folderIterator = new FolderIterator();
+                            folderIterator.iteratingFolders(TAG,URL_SERVER, new File(Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio/"),okHttpClient);
+                        }
+                    };
+
+                    Thread newThread = new Thread(r2);
+                    newThread.start();
+
+                }
+
+                handler.postDelayed(this, SENDING_AUDIO_TIME*1000);
+
+            }
+        };
+
+        handler.postDelayed(r, 1500);
+
 
     }
 

@@ -18,7 +18,7 @@ public class Identifiers {
     public static String ID_APPLICATION;
     // number of times an audio is intent to send to the server
     public static int NUMBER_OF_INTENTS;
-    //time in seconds in which is intended to send the audios
+    //time in seconds in which is intended to send the audios, before restarting
     public static int SENDING_AUDIO_TIME;
     //boolean to determine if send or not send the audios (switch on or off)
     public static boolean IS_ON_SERVICE;
@@ -36,7 +36,8 @@ public class Identifiers {
     //private  final String url ="http://200.126.1.156/gzip/UploadFile";
     //private  final String url ="http://10.0.2.2:3000/upload";
     //private  final String url ="http://10.10.1.126:3000/upload";
-    public static  final String URL_SERVER ="http://192.168.100.91:3000/upload";
+    //public static  final String URL_SERVER ="http://192.168.100.91:3000/upload";
+    public static  final String URL_SERVER ="http://200.126.14.250/gzip/UploadFile";
 
 
     public static void setIdApplication(Context context){
@@ -45,9 +46,9 @@ public class Identifiers {
 
     public static void setPreferencesApplications(Context context){
         PREFS_SETTINGS = PreferenceManager.getDefaultSharedPreferences(context);
-        NUMBER_OF_INTENTS = Integer.parseInt(PREFS_SETTINGS.getString("numberOfIntents","3"));
-        SENDING_AUDIO_TIME = Integer.parseInt(PREFS_SETTINGS.getString("sendingAudioTime", "600"));
-        IS_ON_SERVICE = PREFS_SETTINGS.getBoolean("isOnService", true); //listo (a medias)
+        NUMBER_OF_INTENTS = Integer.parseInt(PREFS_SETTINGS.getString("numberOfIntents","3")); //listo
+        SENDING_AUDIO_TIME = Integer.parseInt(PREFS_SETTINGS.getString("sendingAudioTime", "600")); //listo
+        IS_ON_SERVICE = PREFS_SETTINGS.getBoolean("isOnService", true); //listo
         ON_DESTROY_AUDIO = PREFS_SETTINGS.getBoolean("onDestroyAudio", true); //listo
 
         for ( Map.Entry<String,?> pref : PREFS_SETTINGS.getAll().entrySet() ) {

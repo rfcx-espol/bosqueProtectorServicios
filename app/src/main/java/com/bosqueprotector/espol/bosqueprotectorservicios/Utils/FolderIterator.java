@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import okhttp3.OkHttpClient;
 
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.NUMBER_OF_INTENTS;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.ON_DESTROY_AUDIO;
 
 /**
@@ -43,7 +44,7 @@ public class FolderIterator {
                         //boolean respuesta = sendHttpRequestIntentoEnvio(url, file);
                         if(!routesRecurred.contains(file.toString())){
                             int intentsOfUpload = 0;
-                            while (intentsOfUpload < 3){
+                            while (intentsOfUpload < NUMBER_OF_INTENTS ){
                                 boolean respuesta = Utils.uploadFile(TAG, url, file, okHttpClient);
                                 intentsOfUpload++;
                                 if (respuesta) {

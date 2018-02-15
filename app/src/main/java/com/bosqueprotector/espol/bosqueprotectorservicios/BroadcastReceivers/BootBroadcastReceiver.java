@@ -27,9 +27,8 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
         if (intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED)) {
 
             Log.i(TAG, "Initializing sending audio service...");
-            Utils.initializingVariables(context.getApplicationContext());
             SERVICE_INTENT_AUDIO_SENDER = new Intent(context, SendingAudiosService.class);
-            context.startService(SERVICE_INTENT_AUDIO_SENDER.addFlags((Intent.FLAG_ACTIVITY_NEW_TASK)));
+            context.startService(SERVICE_INTENT_AUDIO_SENDER/*.addFlags((Intent.FLAG_ACTIVITY_NEW_TASK))*/);
 
 
 

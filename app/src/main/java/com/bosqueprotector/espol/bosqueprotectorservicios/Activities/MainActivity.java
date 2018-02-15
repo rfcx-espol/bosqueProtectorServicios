@@ -53,7 +53,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onCreate(savedInstanceState);
         //Utils.initializingVariables(getApplicationContext());
         Log.i(TAG, "binding service with main activity");
-        //bindService(SERVICE_INTENT_AUDIO_SENDER, mConnection, Context.BIND_AUTO_CREATE);
+
+        Intent intentServiceAudio = new Intent(this, SendingAudiosService.class);
+        startService(intentServiceAudio);
+        bindService(intentServiceAudio, mConnection, Context.BIND_ABOVE_CLIENT);
         setContentView(R.layout.activity_main);
     }
 
