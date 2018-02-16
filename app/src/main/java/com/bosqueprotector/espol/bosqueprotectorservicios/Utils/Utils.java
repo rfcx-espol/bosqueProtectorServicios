@@ -21,6 +21,10 @@ import okhttp3.Response;
 
 public class Utils {
 
+        /*
+    * These method is the core, is the one that upload the file to the server
+     */
+
 
     public static boolean uploadFile(String TAG, String url, File file ,OkHttpClient okHttpClient){
 
@@ -51,6 +55,10 @@ public class Utils {
             return false;
         }
     }
+
+    /*
+    * These method initialize all the constants at the beggining of the service
+     */
 
     public static void initializingVariables(Context context){
         Identifiers.setIdApplication(context);

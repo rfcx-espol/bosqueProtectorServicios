@@ -18,7 +18,13 @@ import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifie
  * Created by joset on 04/02/2018.
  */
 
+/*
+*
+* All in these class is executed when the phone is booted
+ */
+
 public class BootBroadcastReceiver extends BroadcastReceiver {
+
 
     String TAG = BootBroadcastReceiver.class.getSimpleName();
     @Override

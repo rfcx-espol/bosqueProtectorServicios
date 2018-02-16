@@ -44,6 +44,11 @@ public class Identifiers {
         ID_APPLICATION = Installation.id(context);
     }
 
+    /*
+    * Set the preferences menu at the beginning of the service
+    *
+     */
+
     public static void setPreferencesApplications(Context context){
         PREFS_SETTINGS = PreferenceManager.getDefaultSharedPreferences(context);
         NUMBER_OF_INTENTS = Integer.parseInt(PREFS_SETTINGS.getString("numberOfIntents","3")); //listo

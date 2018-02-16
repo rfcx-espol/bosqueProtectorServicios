@@ -12,6 +12,11 @@ import java.util.UUID;
  * Created by joset on 23/01/2018.
  */
 
+
+/*
+* These class creates the unique cell phone id
+ */
+
 public class Installation {
     private static String sID = null;
     private static final String INSTALLATION = "INSTALLATION";

@@ -14,6 +14,13 @@ import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifie
  * Created by joset on 23/01/2018.
  */
 
+
+/*
+*Class to implement an iterator over the folders
+*
+*
+*/
+
 public class FolderIterator {
 
     private int counter;
@@ -39,14 +46,12 @@ public class FolderIterator {
                 if (file.isDirectory()) {
                     iteratingFolders(TAG, url, file, okHttpClient);
                 } else {
-                    //while (this.counter < 7) {
-                        //Log.i(TAG, "este es el archivo2 : " + file.toString());
-                        //boolean respuesta = sendHttpRequestIntentoEnvio(url, file);
                         if(!routesRecurred.contains(file.toString())){
                             int intentsOfUpload = 0;
                             while (intentsOfUpload < NUMBER_OF_INTENTS ){
                                 boolean respuesta = Utils.uploadFile(TAG, url, file, okHttpClient);
                                 intentsOfUpload++;
+                                Log.i(TAG, "trying to upload file "  + file.toString() + " ...");
                                 if (respuesta) {
                                     Log.i(TAG, "file uploaded in intent " + intentsOfUpload+ ": " + file.toString());
                                     this.routesRecurred.add(file.toString());
@@ -55,7 +60,7 @@ public class FolderIterator {
                                         if (isDeleted){
                                             Log.i(TAG, "file deleted succesfully!");
                                         }else{
-                                            Log.i(TAG, "file couldn't be deleted");
+                                            Log.e(TAG, "file couldn't be deleted :(");
                                         }
 
                                     }
@@ -63,7 +68,7 @@ public class FolderIterator {
 
                                 } else {
 
-                                    Log.i(TAG, "no funciono amiguito para: " + file.toString() + " :(");
+                                    Log.e(TAG, "something failed when trying to upload : " + file.toString() + " :(");
                                     try {
                                         Thread.sleep(5000);
                                     } catch (InterruptedException e) {
@@ -72,7 +77,6 @@ public class FolderIterator {
 
 
                                 }
-                                Log.i(TAG, "el contador: " + counter);
                                 this.counter++;
 
                             }
@@ -80,7 +84,6 @@ public class FolderIterator {
 
                         }
 
-                    //}
                 }
             }
         }
