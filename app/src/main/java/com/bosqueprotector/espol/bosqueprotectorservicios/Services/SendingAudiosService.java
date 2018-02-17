@@ -14,16 +14,6 @@ import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.FolderIterator;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Utils;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 
 import java.io.File;
 import java.io.IOException;

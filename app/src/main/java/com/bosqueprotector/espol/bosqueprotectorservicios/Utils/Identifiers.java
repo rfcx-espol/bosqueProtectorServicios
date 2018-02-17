@@ -36,8 +36,8 @@ public class Identifiers {
     //private  final String url ="http://200.126.1.156/gzip/UploadFile";
     //private  final String url ="http://10.0.2.2:3000/upload";
     //private  final String url ="http://10.10.1.126:3000/upload";
-    //public static  final String URL_SERVER ="http://192.168.100.91:3000/upload";
-    public static  final String URL_SERVER ="http://200.126.14.250/gzip/UploadFile";
+    public static  final String URL_SERVER ="http://192.168.100.91:3000/upload";
+    //public static  final String URL_SERVER ="http://200.126.14.250/gzip/UploadFile";
 
 
     public static void setIdApplication(Context context){
