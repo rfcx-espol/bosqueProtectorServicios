@@ -1,6 +1,8 @@
 package com.bosqueprotector.espol.bosqueprotectorservicios.Utils;
 
 import android.content.Context;
+import android.os.Environment;
+import android.os.StatFs;
 import android.util.Log;
 
 import java.io.File;
@@ -64,4 +66,32 @@ public class Utils {
         Identifiers.setIdApplication(context);
         Identifiers.setPreferencesApplications(context);
     }
+    /*
+    * These methods return available external size
+    */
+
+    public static boolean getAvailableExternalMemorySize() {
+        if (externalMemoryAvailable()) {
+            File path = Environment.getExternalStorageDirectory();
+            StatFs stat = new StatFs(path.getPath());
+            long blockSize = stat.getBlockSize();
+            long availableBlocks = stat.getAvailableBlocks();
+            long size = availableBlocks * blockSize;
+            Log.i("Utils", "Available size in bytes: " + size);
+            if (size < 10485760){ //10MB
+                return false;
+            }else{
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean externalMemoryAvailable() {
+        return android.os.Environment.getExternalStorageState().equals(
+                android.os.Environment.MEDIA_MOUNTED);
+    }
+
+
 }

@@ -36,6 +36,7 @@ import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifie
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.IS_ON_SERVICE;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SENDING_AUDIO_TIME;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.URL_SERVER;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Utils.getAvailableExternalMemorySize;
 
 /**
  * Created by joset on 16/01/2018.
@@ -117,7 +118,7 @@ public class SendingAudiosService extends Service {
         t.scheduleAtFixedRate(new TimerTask() {
              @Override
              public void run() {
-                if(IS_ON_SERVICE){// check net connection
+                if((IS_ON_SERVICE) && (getAvailableExternalMemorySize())){// check net connection and storage size
                     //what u want to do....
                     FolderIterator folderIterator = new FolderIterator();
                     folderIterator.iteratingFolders(TAG,URL_SERVER, new File(Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio/"),okHttpClient);
@@ -144,7 +145,7 @@ public class SendingAudiosService extends Service {
         final Runnable r = new Runnable() {
             @Override
             public void run() {
-                if(IS_ON_SERVICE){// check net connection
+                if((IS_ON_SERVICE) && (getAvailableExternalMemorySize())){// check net connection
                     //what u want to do....
                     Runnable r2 = new Runnable() {
                         @Override
