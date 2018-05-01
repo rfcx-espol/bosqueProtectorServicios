@@ -151,7 +151,8 @@ public class SendingAudiosService extends Service {
                         @Override
                         public void run() {
                             FolderIterator folderIterator = new FolderIterator();
-                            folderIterator.iteratingFolders(TAG,URL_SERVER, new File(Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio/"),okHttpClient);
+                            //folderIterator.iteratingFolders(TAG,URL_SERVER, new File(Environment.getExternalStorageDirectory().getPath()+ "/rfcx/audio/"),okHttpClient);
+                            folderIterator.iteratingFolders(TAG,URL_SERVER, new File(Environment.getExternalStorageDirectory().getPath()+ "/audios/"),okHttpClient);
                         }
                     };
 
