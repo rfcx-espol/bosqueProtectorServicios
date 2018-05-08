@@ -1,47 +1,46 @@
-package com.bosqueprotector.espol.bosqueprotectorservicios.BroadcastReceivers;
+package com.bosqueprotector.espol.bosqueprotectorservicios.broadcastReceivers;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.util.Log;
+import com.bosqueprotector.espol.bosqueprotectorservicios.services.SendingAudiosService;
 
-import com.bosqueprotector.espol.bosqueprotectorservicios.Activities.MainActivity;
-import com.bosqueprotector.espol.bosqueprotectorservicios.Services.SendingAudiosService;
-import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Utils;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SERVICE_INTENT_AUDIO_SENDER;
-
-/**
- * Created by joset on 04/02/2018.
- */
-
-/*
-*
-* All in these class is executed when the phone is booted
- */
+import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.SENDING_AUDIO_TIME;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.SERVICE_INTENT_AUDIO_SENDER;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.SLEEP_TIME;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.onService;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.setPreferencesApplications;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.alarmManager;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.pendingIntent;
 
 public class BootBroadcastReceiver extends BroadcastReceiver {
-
-
     String TAG = BootBroadcastReceiver.class.getSimpleName();
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.i(TAG, "Initializing broadcast...");
-        if (intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED)) {
-
-            Log.i(TAG, "Initializing sending audio service...");
+        /*if (intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED)) {
             SERVICE_INTENT_AUDIO_SENDER = new Intent(context, SendingAudiosService.class);
-            context.startService(SERVICE_INTENT_AUDIO_SENDER/*.addFlags((Intent.FLAG_ACTIVITY_NEW_TASK))*/);
+            context.startService(SERVICE_INTENT_AUDIO_SENDER);
+        }*/
 
-
-
-            /*
-            Intent mainIntent = new Intent(context, MainActivity.class);
-            context.startActivity(mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            */
+        //INICIAR EL SERVICIO
+        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+            if (!onService) {
+                setPreferencesApplications(context);
+                pendingIntent = PendingIntent.getService(context, 0,
+                        new Intent(context, SendingAudiosService.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                if (alarmManager != null) {
+                    alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 1000,
+                            SLEEP_TIME + SENDING_AUDIO_TIME, pendingIntent);
+                    Log.d("ALARMA", "ALARMA CREADA DESPUÉS DE REINICIAR EL DISPOSITIVO");
+                }
+                onService = true;
+            }
         }
+
     }
 }

@@ -9,18 +9,18 @@
         android:defaultValue="3" />
 
     <EditTextPreference
-        android:key="sleepTime"
-        android:title="Sleep time"
-        android:summary="amount of time in which the services is sleeping (in seconds)"
-        android:enabled="true"
-        android:defaultValue="600" />
-
-    <EditTextPreference
         android:key="sendingAudioTime"
         android:title="Sending audio time"
         android:summary="amount of time in which the service is running and sending audios"
         android:enabled="true"
-        android:defaultValue="600" />
+        android:defaultValue="180" />
+
+    <EditTextPreference
+        android:key="sleepTime"
+        android:title="Sleep time"
+        android:summary="Tiempo que espera el servicio para volver a ejecutarse"
+        android:enabled="true"
+        android:defaultValue="180" />
 
     <CheckBoxPreference
         android:key="isOnService"
@@ -35,7 +35,5 @@
         android:enabled="true"
         android:summary="checkbox to enable/disable the deleting of files after they go to the server"
         android:defaultValue="true" />
-
-
 
 </PreferenceScreen>

@@ -1,94 +1,86 @@
-package com.bosqueprotector.espol.bosqueprotectorservicios.Utils;
+package com.bosqueprotector.espol.bosqueprotectorservicios.utils;
 
 import android.util.Log;
-
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import okhttp3.OkHttpClient;
-
-import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.NUMBER_OF_INTENTS;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.ON_DESTROY_AUDIO;
-
-/**
- * Created by joset on 23/01/2018.
- */
-
-
-/*
-*Class to implement an iterator over the folders
-*
-*
-*/
+import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.NUMBER_OF_INTENTS;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.ON_DESTROY_AUDIO;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.SENDING_AUDIO_TIME;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.threadRunning;
 
 public class FolderIterator {
-
-    private int counter;
     private ArrayList<String> routesRecurred;
 
     public FolderIterator() {
-        this.counter = 0;
-        this.routesRecurred = new ArrayList<String>();
+        this.routesRecurred = new ArrayList<>();
     }
 
     public FolderIterator(int counter, ArrayList<String> routesRecurred) {
-        this.counter = counter;
         this.routesRecurred = routesRecurred;
     }
 
+    //ITERA EN LAS CARPETAS DE LA CARPETA AUDIOS
     public void iteratingFolders(String TAG, String url, File dir, OkHttpClient okHttpClient) {
-
+        long captureTimeStamp = System.currentTimeMillis();
         if (dir.exists()) {
             File[] files = dir.listFiles();
+            Arrays.sort(files);
             for (int i = 0; i < files.length; i++) {
+                /*if(System.currentTimeMillis() >= (captureTimeStamp + SENDING_AUDIO_TIME)){
+                    return;
+                }*/
                 File file = files[i];
-                //Log.i(TAG, "este es el archivo1 : " + file.toString());
+                Log.i(TAG, "este es el archivo : " + file.toString());
                 if (file.isDirectory()) {
                     iteratingFolders(TAG, url, file, okHttpClient);
                 } else {
-                        if(!routesRecurred.contains(file.toString())){
-                            int intentsOfUpload = 0;
-                            while (intentsOfUpload < NUMBER_OF_INTENTS ){
-                                boolean respuesta = Utils.uploadFile(TAG, url, file, okHttpClient);
-                                intentsOfUpload++;
-                                Log.i(TAG, "trying to upload file "  + file.toString() + " ...");
-                                if (respuesta) {
-                                    Log.i(TAG, "file uploaded in intent " + intentsOfUpload+ ": " + file.toString());
-                                    this.routesRecurred.add(file.toString());
-                                    if (ON_DESTROY_AUDIO ){
-                                        boolean isDeleted = file.delete();
-                                        if (isDeleted){
-                                            Log.i(TAG, "file deleted succesfully!");
-                                        }else{
-                                            Log.e(TAG, "file couldn't be deleted :(");
-                                        }
-
-                                    }
-                                    break;
-
-                                } else {
-
-                                    Log.e(TAG, "something failed when trying to upload : " + file.toString() + " :(");
-                                    try {
-                                        Thread.sleep(5000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-
-
-                                }
-                                this.counter++;
-
+                    if(!routesRecurred.contains(file.toString())){
+                        int intentsOfUpload = 0;
+                        while (intentsOfUpload < NUMBER_OF_INTENTS ){
+                            if(!threadRunning) {
+                                Log.d("HILO", "HILO ELIMINADO");
+                                return;
                             }
-
-
+                            boolean respuesta = Utils.uploadFile(TAG, url, file, okHttpClient);
+                            intentsOfUpload++;
+                            Log.i(TAG, "INTENTANDO SUBIR ARCHIVO "  + file.toString() + " ...");
+                            if (respuesta) {
+                                Log.i(TAG, "ARCHIVO SUBIDO EN INTENTO " + intentsOfUpload+ ": " + file.toString());
+                                this.routesRecurred.add(file.toString());
+                                if (ON_DESTROY_AUDIO ){
+                                    boolean isDeleted = file.delete();
+                                    if (isDeleted){
+                                        Log.i(TAG, "ARCHIVO BORRADO EXITOSAMENTE");
+                                    }else{
+                                        Log.e(TAG, "ARCHIVO NO BORRADO");
+                                    }
+                                }
+                                break;
+                            } else {
+                                Log.e(TAG, "ERROR AL SUBIR EL ARCHIVO " + file.toString());
+                                try {
+                                    Thread.sleep(5000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
-
+                    }
                 }
             }
         }
-
     }
 
+    public void directorios(File dir){
+        File[] files = dir.listFiles();
+        Arrays.sort(files);
+        for(int i = 0; i < files.length; i++){
+            File file = files[i];
+            Log.d("DIRECTORIOS: ", file.toString());
+        }
+    }
 
 }

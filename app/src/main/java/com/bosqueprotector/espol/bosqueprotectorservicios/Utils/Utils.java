@@ -1,14 +1,11 @@
-package com.bosqueprotector.espol.bosqueprotectorservicios.Utils;
+package com.bosqueprotector.espol.bosqueprotectorservicios.utils;
 
-import android.content.Context;
 import android.os.Environment;
 import android.os.StatFs;
 import android.util.Log;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.regex.Pattern;
-
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -17,22 +14,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/**
- * Created by joset on 23/01/2018.
- */
-
 public class Utils {
 
-        /*
-    * These method is the core, is the one that upload the file to the server
-     */
-
-
+    //MÉTODO QUE SUBE UN ARCHIVO AL SERVIDOR
     public static boolean uploadFile(String TAG, String url, File file ,OkHttpClient okHttpClient){
-
         String[] splitter = file.toString().split(Pattern.quote(File.separator));
         String filename = splitter[splitter.length-1];
-
+        Log.d("ID_PHONE", String.valueOf(Identifiers.ID_PHONE));
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("filename", filename)
@@ -48,28 +36,18 @@ public class Utils {
         Response response = null;
         try {
             response = call.execute();
-            Log.i(TAG, "este es :" + Identifiers.ID_APPLICATION);
+            Log.i(TAG, "id del dispositivo :" + String.valueOf(Identifiers.ID_PHONE));
+            Log.i(TAG, "id_applicacion :" + Identifiers.ID_APPLICATION);
+            Log.i(TAG, "filename :" + filename);
             Log.i(TAG, "este es mensaje: " + response.body().string());
             return true;
-
-        }catch(IOException e){
+        } catch(IOException e){
             e.printStackTrace();
             return false;
         }
     }
 
-    /*
-    * These method initialize all the constants at the beggining of the service
-     */
-
-    public static void initializingVariables(Context context){
-        Identifiers.setIdApplication(context);
-        Identifiers.setPreferencesApplications(context);
-    }
-    /*
-    * These methods return available external size
-    */
-
+    //VERIFICAR SI HAY ESPACIO EN LA MEMORIA EXTERNA
     public static boolean getAvailableExternalMemorySize() {
         if (externalMemoryAvailable()) {
             File path = Environment.getExternalStorageDirectory();
@@ -77,7 +55,7 @@ public class Utils {
             long blockSize = stat.getBlockSize();
             long availableBlocks = stat.getAvailableBlocks();
             long size = availableBlocks * blockSize;
-            Log.i("Utils", "Available size in bytes: " + size);
+            Log.i("utils", "Available size in bytes: " + size);
             if (size < 10485760){ //10MB
                 return false;
             }else{
@@ -88,10 +66,10 @@ public class Utils {
         }
     }
 
-    public static boolean externalMemoryAvailable() {
+    //RETORNAR LA MEMORIA EXTERNA
+    private static boolean externalMemoryAvailable() {
         return android.os.Environment.getExternalStorageState().equals(
                 android.os.Environment.MEDIA_MOUNTED);
     }
-
 
 }

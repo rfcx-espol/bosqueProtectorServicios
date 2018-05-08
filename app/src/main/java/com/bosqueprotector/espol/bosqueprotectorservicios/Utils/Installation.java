@@ -1,21 +1,11 @@
-package com.bosqueprotector.espol.bosqueprotectorservicios.Utils;
+package com.bosqueprotector.espol.bosqueprotectorservicios.utils;
 
 import android.content.Context;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.UUID;
-
-/**
- * Created by joset on 23/01/2018.
- */
-
-
-/*
-* These class creates the unique cell phone id
- */
 
 public class Installation {
     private static String sID = null;
