@@ -20,7 +20,7 @@
         android:title="Sleep time"
         android:summary="Tiempo que espera el servicio para volver a ejecutarse"
         android:enabled="true"
-        android:defaultValue="180" />
+        android:defaultValue="420" />
 
     <CheckBoxPreference
         android:key="isOnService"

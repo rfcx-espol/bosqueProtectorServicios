@@ -23,7 +23,6 @@ public class SendingAudiosService extends Service {
     OkHttpClient okHttpClient = new OkHttpClient();
     private final IBinder mBinder = new LocalBinder();
     public static PowerManager.WakeLock wakeLock;
-    Thread newThread;
 
     public class LocalBinder extends Binder {
         public SendingAudiosService getService() {
@@ -62,8 +61,6 @@ public class SendingAudiosService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        newThread = null;
-        Log.d("HILO", "HILO ELIMINADO");
         wakeLock.release();
     }
 
@@ -82,7 +79,7 @@ public class SendingAudiosService extends Service {
                 folderIterator.iteratingFolders(TAG,URL_SERVER, new File(Environment.getExternalStorageDirectory().getPath()+ "/audios/"),okHttpClient);
             }
         };
-        newThread = new Thread(r);
+        Thread newThread = new Thread(r);
         newThread.start();
     }
 

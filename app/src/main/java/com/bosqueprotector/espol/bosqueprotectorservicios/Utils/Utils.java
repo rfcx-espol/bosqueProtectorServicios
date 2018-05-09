@@ -13,6 +13,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.threadRunning;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.call;
 
 public class Utils {
 
@@ -32,9 +34,12 @@ public class Utils {
                 .post(requestBody)
                 .build();
 
-        Call call = okHttpClient.newCall(request);
+        call = okHttpClient.newCall(request);
         Response response = null;
         try {
+            if(!threadRunning){
+                return false;
+            }
             response = call.execute();
             Log.i(TAG, "id del dispositivo :" + String.valueOf(Identifiers.ID_PHONE));
             Log.i(TAG, "id_applicacion :" + Identifiers.ID_APPLICATION);

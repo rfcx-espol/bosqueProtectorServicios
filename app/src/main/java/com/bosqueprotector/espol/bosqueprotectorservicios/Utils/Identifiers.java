@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import java.util.Map;
+import okhttp3.Call;
 
 public class Identifiers {
     //ID DEL DISPOSITIVO
@@ -36,9 +37,9 @@ public class Identifiers {
     public static AlarmManager alarmManager;
     public static PendingIntent pendingIntent;
     public static boolean threadRunning = true;
+    public static Call call;
     //DIRECCIÓN IP DEL SERVIDOR
     public static final String URL_SERVER ="http://200.126.14.250/gzip/UploadFile";
-    //public static final String URL_SERVER ="http://192.168.100.64:5000/gzip/UploadFile";
 
     //ESTABLECE EL ID DEL DISPOSITIVO
     @SuppressLint("HardwareIds")

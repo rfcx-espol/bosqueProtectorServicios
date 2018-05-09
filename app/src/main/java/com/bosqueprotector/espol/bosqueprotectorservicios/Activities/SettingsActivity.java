@@ -12,6 +12,7 @@ import com.bosqueprotector.espol.bosqueprotectorservicios.services.SendingAudios
 
 import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.SENDING_AUDIO_TIME;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.SLEEP_TIME;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.call;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.setPreferencesApplications;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.alarmManager;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.pendingIntent;
@@ -32,6 +33,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         if (key.equals("sleepTime") || key.equals("sendingAudioTime")) {
             Log.d("METODO CHANGE", "ENTRÓ");
             threadRunning = false;
+            call.cancel();
             stopService(new Intent(this, SendingAudiosService.class));
             setPreferencesApplications(getApplicationContext());
             alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 1000,

@@ -29,9 +29,6 @@ public class FolderIterator {
             File[] files = dir.listFiles();
             Arrays.sort(files);
             for (int i = 0; i < files.length; i++) {
-                /*if(System.currentTimeMillis() >= (captureTimeStamp + SENDING_AUDIO_TIME)){
-                    return;
-                }*/
                 File file = files[i];
                 Log.i(TAG, "este es el archivo : " + file.toString());
                 if (file.isDirectory()) {
@@ -40,11 +37,11 @@ public class FolderIterator {
                     if(!routesRecurred.contains(file.toString())){
                         int intentsOfUpload = 0;
                         while (intentsOfUpload < NUMBER_OF_INTENTS ){
+                            boolean respuesta = Utils.uploadFile(TAG, url, file, okHttpClient);
                             if(!threadRunning) {
-                                Log.d("HILO", "HILO ELIMINADO");
+                                Log.d("HILO", "HILO: " + Thread.currentThread().getId() + " ELIMINADO");
                                 return;
                             }
-                            boolean respuesta = Utils.uploadFile(TAG, url, file, okHttpClient);
                             intentsOfUpload++;
                             Log.i(TAG, "INTENTANDO SUBIR ARCHIVO "  + file.toString() + " ...");
                             if (respuesta) {
@@ -53,9 +50,9 @@ public class FolderIterator {
                                 if (ON_DESTROY_AUDIO ){
                                     boolean isDeleted = file.delete();
                                     if (isDeleted){
-                                        Log.i(TAG, "ARCHIVO BORRADO EXITOSAMENTE");
+                                        Log.i(TAG, "ARCHIVO BORRADO EXITOSAMENTE, HILO: " + Thread.currentThread().getId());
                                     }else{
-                                        Log.e(TAG, "ARCHIVO NO BORRADO");
+                                        Log.e(TAG, "ARCHIVO NO BORRADO, HILO: " + Thread.currentThread().getId());
                                     }
                                 }
                                 break;
