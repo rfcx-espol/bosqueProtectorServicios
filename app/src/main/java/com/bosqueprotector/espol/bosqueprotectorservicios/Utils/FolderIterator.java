@@ -1,6 +1,11 @@
 package com.bosqueprotector.espol.bosqueprotectorservicios.utils;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.bosqueprotector.espol.bosqueprotectorservicios.activities.MainActivity;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;

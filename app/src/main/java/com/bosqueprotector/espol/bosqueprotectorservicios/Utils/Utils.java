@@ -26,7 +26,7 @@ public class Utils {
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("filename", filename)
-                .addFormDataPart("deviceId", Identifiers.ID_APPLICATION)
+                .addFormDataPart("deviceId", Identifiers.ID_PHONE)
                 .addFormDataPart("file", filename, RequestBody.create(MediaType.parse("application/octet-stream"), file))
                 .build();
         Request request = new Request.Builder()
