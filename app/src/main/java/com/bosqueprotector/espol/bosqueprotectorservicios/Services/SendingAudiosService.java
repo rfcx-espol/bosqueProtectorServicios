@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import com.bosqueprotector.espol.bosqueprotectorservicios.utils.FolderIterator;
 import java.io.File;
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.URL_SERVER;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.setIdApplication;
@@ -20,7 +22,8 @@ import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifie
 
 public class SendingAudiosService extends Service {
     private static final String TAG = SendingAudiosService.class.getSimpleName();
-    OkHttpClient okHttpClient = new OkHttpClient();
+    private static OkHttpClient okHttpClient = new OkHttpClient();
+
     private final IBinder mBinder = new LocalBinder();
     public static PowerManager.WakeLock wakeLock;
 
@@ -75,12 +78,22 @@ public class SendingAudiosService extends Service {
         final Runnable r = new Runnable() {
             @Override
             public void run() {
+                builder();
                 FolderIterator folderIterator = new FolderIterator();
                 folderIterator.iteratingFolders(TAG,URL_SERVER, new File(Environment.getExternalStorageDirectory().getPath()+ "/audios/"),okHttpClient);
             }
         };
         Thread newThread = new Thread(r);
         newThread.start();
+    }
+
+    //CREAR BUILDER DEL CLIENTE PARA QUE EXPIRE DESPUÉS DE 10 MINUTOS SIN CONEXIÓN
+    public static void builder(){
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.connectTimeout(10, TimeUnit.MINUTES)
+                .writeTimeout(10, TimeUnit.MINUTES)
+                .readTimeout(10, TimeUnit.MINUTES);
+        okHttpClient = builder.build();
     }
 
 }
