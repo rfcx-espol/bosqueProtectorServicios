@@ -1,4 +1,4 @@
-package com.bosqueprotector.espol.bosqueprotectorservicios.activities;
+package com.bosqueprotector.espol.bosqueprotectorservicios.Activities;
 
 import android.app.AlarmManager;
 import android.content.Intent;
@@ -8,15 +8,15 @@ import android.os.SystemClock;
 import android.preference.PreferenceActivity;
 import android.util.Log;
 import com.bosqueprotector.espol.bosqueprotectorservicios.R;
-import com.bosqueprotector.espol.bosqueprotectorservicios.services.SendingAudiosService;
+import com.bosqueprotector.espol.bosqueprotectorservicios.Services.SendingAudiosService;
 
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.SENDING_AUDIO_TIME;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.SLEEP_TIME;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.call;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.setPreferencesApplications;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.alarmManager;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.pendingIntent;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.threadRunning;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SENDING_AUDIO_TIME;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SLEEP_TIME;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.call;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.setPreferencesApplications;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.alarmManager;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.pendingIntent;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.threadRunning;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 

@@ -1,20 +1,20 @@
-package com.bosqueprotector.espol.bosqueprotectorservicios.utils;
+package com.bosqueprotector.espol.bosqueprotectorservicios.Utils;
 
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.bosqueprotector.espol.bosqueprotectorservicios.activities.MainActivity;
+import com.bosqueprotector.espol.bosqueprotectorservicios.Activities.MainActivity;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import okhttp3.OkHttpClient;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.NUMBER_OF_INTENTS;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.ON_DESTROY_AUDIO;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.SENDING_AUDIO_TIME;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.threadRunning;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.NUMBER_OF_INTENTS;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.ON_DESTROY_AUDIO;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SENDING_AUDIO_TIME;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.threadRunning;
 
 public class FolderIterator {
     private ArrayList<String> routesRecurred;

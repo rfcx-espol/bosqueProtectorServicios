@@ -17,21 +17,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.bosqueprotector.espol.bosqueprotectorservicios.activities.MainActivity">
+        <activity android:name="com.bosqueprotector.espol.bosqueprotectorservicios.Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.bosqueprotector.espol.bosqueprotectorservicios.activities.SettingsActivity"
+            android:name="com.bosqueprotector.espol.bosqueprotectorservicios.Activities.SettingsActivity"
             android:label="@string/prefs" />
         <service
-            android:name="com.bosqueprotector.espol.bosqueprotectorservicios.services.SendingAudiosService"
+            android:name="com.bosqueprotector.espol.bosqueprotectorservicios.Services.SendingAudiosService"
             android:enabled="true"
             android:exported="true" />
         <receiver
-            android:name="com.bosqueprotector.espol.bosqueprotectorservicios.broadcastReceivers.BootBroadcastReceiver"
+            android:name="com.bosqueprotector.espol.bosqueprotectorservicios.BroadcastReceivers.BootBroadcastReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

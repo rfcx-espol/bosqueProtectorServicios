@@ -1,4 +1,4 @@
-package com.bosqueprotector.espol.bosqueprotectorservicios.utils;
+package com.bosqueprotector.espol.bosqueprotectorservicios.Utils;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;

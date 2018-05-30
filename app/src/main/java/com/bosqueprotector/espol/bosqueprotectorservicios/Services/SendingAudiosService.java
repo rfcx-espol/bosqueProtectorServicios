@@ -1,4 +1,4 @@
-package com.bosqueprotector.espol.bosqueprotectorservicios.services;
+package com.bosqueprotector.espol.bosqueprotectorservicios.Services;
 
 import android.app.Service;
 import android.content.Intent;
@@ -8,17 +8,17 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import com.bosqueprotector.espol.bosqueprotectorservicios.utils.FolderIterator;
+import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.FolderIterator;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.URL_SERVER;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.setIdApplication;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.setIdPhone;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.setPreferencesApplications;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.SENDING_AUDIO_TIME;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.threadRunning;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.URL_SERVER;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.setIdApplication;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.setIdPhone;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.setPreferencesApplications;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SENDING_AUDIO_TIME;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.threadRunning;
 
 public class SendingAudiosService extends Service {
     private static final String TAG = SendingAudiosService.class.getSimpleName();

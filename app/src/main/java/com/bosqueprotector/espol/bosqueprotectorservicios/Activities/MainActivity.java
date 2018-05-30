@@ -1,4 +1,4 @@
-package com.bosqueprotector.espol.bosqueprotectorservicios.activities;
+package com.bosqueprotector.espol.bosqueprotectorservicios.Activities;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -15,14 +15,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.bosqueprotector.espol.bosqueprotectorservicios.R;
-import com.bosqueprotector.espol.bosqueprotectorservicios.services.SendingAudiosService;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.IS_BOUNDED_AUDIO_SERVICE;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.SLEEP_TIME;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.onService;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.SENDING_AUDIO_TIME;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.setPreferencesApplications;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.alarmManager;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.utils.Identifiers.pendingIntent;
+import com.bosqueprotector.espol.bosqueprotectorservicios.Services.SendingAudiosService;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.IS_BOUNDED_AUDIO_SERVICE;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SLEEP_TIME;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.onService;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SENDING_AUDIO_TIME;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.setPreferencesApplications;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.alarmManager;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.pendingIntent;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
