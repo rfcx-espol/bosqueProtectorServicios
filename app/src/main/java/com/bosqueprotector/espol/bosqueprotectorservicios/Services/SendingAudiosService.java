@@ -15,9 +15,8 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.URL_SERVER;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.setIdApplication;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.setIdPhone;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.setAPIKey;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.setPreferencesApplications;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SENDING_AUDIO_TIME;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.threadRunning;
 
 public class SendingAudiosService extends Service {
@@ -44,7 +43,7 @@ public class SendingAudiosService extends Service {
     public void onCreate(){
         super.onCreate();
         setIdApplication(getApplicationContext());
-        setIdPhone(getApplicationContext());
+        setAPIKey(getApplicationContext());
         setPreferencesApplications(getApplicationContext());
 
         //MANTENER ENCENDIDO EL CPU DEL CELULAR AL APAGAR LA PANTALLA

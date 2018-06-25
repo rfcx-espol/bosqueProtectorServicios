@@ -5,10 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+
 import com.bosqueprotector.espol.bosqueprotectorservicios.R;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Services.SendingAudiosService;
+import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers;
 
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SENDING_AUDIO_TIME;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SLEEP_TIME;
@@ -24,6 +27,13 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.prefs);
+        EditTextPreference APIKey_preference = new EditTextPreference(SettingsActivity.this);
+        APIKey_preference.setKey("APIKey");
+        APIKey_preference.setTitle("APIKey");
+        APIKey_preference.setSummary("Key to authenticate the station in the server");
+        APIKey_preference.setDefaultValue(Identifiers.APIKey);
+        APIKey_preference.setOrder(0);
+        getPreferenceScreen().addPreference(APIKey_preference);
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 

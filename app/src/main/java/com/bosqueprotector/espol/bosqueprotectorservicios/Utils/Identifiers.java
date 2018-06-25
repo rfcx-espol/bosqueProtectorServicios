@@ -13,15 +13,17 @@ import java.util.Map;
 import okhttp3.Call;
 
 public class Identifiers {
-    //ID DEL DISPOSITIVO
-    public static String ID_PHONE;
+    //ID DE LA ESTACIÓN PARA AUTENTICACIÓN EN EL SERVIDOR
+    public static String APIKey;
     //ID DE LA APLICACIÓN
     public static String ID_APPLICATION;
+    //ID DE LA ESTACIÓN EN LA BASE DE DATOS
+    public static String ID_STATION;
     //NÚMERO DE VECES QUE EL AUDIO INTENTA ENVIARSE AL SERVIDOR
     public static int NUMBER_OF_INTENTS;
     //TIEMPO EN SEGUNDOS EN QUE SE INTENTA ENVIAR EL AUDIO ANTES DE REINICIAR
     public static int SENDING_AUDIO_TIME;
-
+    //TIEMPO EN SEGUNDOS EN QUE LA APP NO ESTÁ CORRIENDO
     public static int SLEEP_TIME;
     //DETERMINA SI SE ENVÍAN AUDIOS O NO
     public static boolean IS_ON_SERVICE;
@@ -39,12 +41,12 @@ public class Identifiers {
     public static boolean threadRunning = true;
     public static Call call;
     //DIRECCIÓN IP DEL SERVIDOR
-    public static final String URL_SERVER ="http://200.126.14.250/gzip/UploadFile";
+    public static final String URL_SERVER ="http://200.126.14.250/File/UploadFile";
 
     //ESTABLECE EL ID DEL DISPOSITIVO
     @SuppressLint("HardwareIds")
-    public static void setIdPhone(Context context){
-        ID_PHONE = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    public static void setAPIKey(Context context){
+        APIKey = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
     //ESTABLECE EL ID DE LA APLICACIÓN
