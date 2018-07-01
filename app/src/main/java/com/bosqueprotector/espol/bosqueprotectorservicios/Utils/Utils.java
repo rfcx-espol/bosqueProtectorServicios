@@ -26,6 +26,7 @@ public class Utils {
 
     //MÉTODO QUE SUBE UN ARCHIVO AL SERVIDOR
     public static boolean uploadFile(String TAG, String url, File file ,OkHttpClient okHttpClient){
+        Identifiers.ID_STATION = "";
         String[] splitter = file.toString().split(Pattern.quote(File.separator));
         String filename = splitter[splitter.length-1];
         MediaMetadataRetriever meta = new MediaMetadataRetriever();
@@ -34,11 +35,53 @@ public class Utils {
         Date d = new Date(Long.valueOf(filename.substring(0, filename.length() - 4)));
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         String fecha_grabacion = sdf.format(d);
-        boolean respuesta = getStationID(okHttpClient);
+        boolean responseId = getStationID(okHttpClient);
+        if(responseId){
+            return sendAudio(okHttpClient, url, filename, fecha_grabacion, duracion, file);
+        } else {
+            return false;
+        }
+    }
+
+    //MÉTODO QUE ENVÍA EL APIKEY Y RECIBE EL ID DE LA ESTACIÓN EN LA BASE DE DATOS
+    private static boolean getStationID(OkHttpClient okHttpClient){
+        HttpUrl.Builder httpBuilder = HttpUrl.parse("http://200.126.14.250/api/Station").newBuilder();
+        httpBuilder.addQueryParameter("APIKey", Identifiers.APIKey);
+        Request request = new Request.Builder().url(httpBuilder.build()).build();
+        call = okHttpClient.newCall(request);
+        try {
+            if(!threadRunning){
+                return false;
+            }
+            Response response = call.execute();
+            if(response.code() == 200){
+                JSONObject obj = new JSONObject(response.body().string());
+                if(obj.getString("APIKey").equals(Identifiers.APIKey)){
+                    Identifiers.ID_STATION = obj.getString("Id");
+                    response.body().close();
+                    return true;
+                }
+                return false;
+            } else {
+                response.body().close();
+                return false;
+            }
+        } catch(IOException e){
+            e.printStackTrace();
+            return false;
+        } catch(org.json.JSONException je){
+            je.printStackTrace();
+            Log.d("ERROR", je.getMessage());
+            return false;
+        }
+    }
+
+    //MÉTODO QUE ENVÍA EL ID DE LA ESTACIÓN, EL APIKEY Y EL AUDIO CON SUS DATOS
+    private static boolean sendAudio(OkHttpClient okHttpClient, String url, String filename, String fecha_grabacion, int duracion, File file){
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("Filename", filename)
-                .addFormDataPart("ID", Identifiers.ID_STATION)
+                .addFormDataPart("Id", Identifiers.ID_STATION)
                 .addFormDataPart("APIKey", Identifiers.APIKey)
                 .addFormDataPart("RecordingDate", fecha_grabacion)
                 .addFormDataPart("Duration", String.valueOf(duracion))
@@ -60,32 +103,6 @@ public class Utils {
             return true;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
-        }
-    }
-
-    private static boolean getStationID(OkHttpClient okHttpClient){
-        HttpUrl.Builder httpBuilder = HttpUrl.parse("http://200.126.14.250/api/Station").newBuilder();
-        httpBuilder.addQueryParameter("APIKey", Identifiers.APIKey);
-        Request request = new Request.Builder().url(httpBuilder.build()).build();
-
-        call = okHttpClient.newCall(request);
-        Response response = null;
-        try {
-            if(!threadRunning){
-                return false;
-            }
-            response = call.execute();
-            if(response != null){
-                JSONObject obj = new JSONObject(response.toString());
-                Identifiers.ID_STATION = obj.getString("ID");
-            }
-            return true;
-        } catch(IOException e){
-            e.printStackTrace();
-            return false;
-        } catch(org.json.JSONException je){
-            je.printStackTrace();
             return false;
         }
     }

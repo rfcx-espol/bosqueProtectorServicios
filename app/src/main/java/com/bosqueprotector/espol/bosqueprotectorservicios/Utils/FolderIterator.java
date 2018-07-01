@@ -64,7 +64,7 @@ public class FolderIterator {
                             } else {
                                 Log.e(TAG, "ERROR AL SUBIR EL ARCHIVO " + file.toString());
                                 try {
-                                    Thread.sleep(5000);
+                                    Thread.sleep(30000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
