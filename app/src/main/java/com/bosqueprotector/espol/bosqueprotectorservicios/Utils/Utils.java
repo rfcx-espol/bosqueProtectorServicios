@@ -19,13 +19,12 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.Callback;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.threadRunning;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.call;
 
 public class Utils {
 
     //MÉTODO QUE SUBE UN ARCHIVO AL SERVIDOR
-    public static boolean uploadFile(String TAG, String url, File file ,OkHttpClient okHttpClient){
+    public static int uploadFile(String url, File file ,OkHttpClient okHttpClient){
         Identifiers.ID_STATION = "";
         String[] splitter = file.toString().split(Pattern.quote(File.separator));
         String filename = splitter[splitter.length-1];
@@ -39,7 +38,7 @@ public class Utils {
         if(responseId){
             return sendAudio(okHttpClient, url, filename, fecha_grabacion, duracion, file);
         } else {
-            return false;
+            return 0;
         }
     }
 
@@ -50,9 +49,6 @@ public class Utils {
         Request request = new Request.Builder().url(httpBuilder.build()).build();
         call = okHttpClient.newCall(request);
         try {
-            if(!threadRunning){
-                return false;
-            }
             Response response = call.execute();
             if(response.code() == 200){
                 JSONObject obj = new JSONObject(response.body().string());
@@ -71,13 +67,13 @@ public class Utils {
             return false;
         } catch(org.json.JSONException je){
             je.printStackTrace();
-            Log.d("ERROR", je.getMessage());
+            Log.e("ERROR", je.getMessage());
             return false;
         }
     }
 
     //MÉTODO QUE ENVÍA EL ID DE LA ESTACIÓN, EL APIKEY Y EL AUDIO CON SUS DATOS
-    private static boolean sendAudio(OkHttpClient okHttpClient, String url, String filename, String fecha_grabacion, int duracion, File file){
+    private static int sendAudio(OkHttpClient okHttpClient, String url, String filename, String fecha_grabacion, int duracion, File file){
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("Filename", filename)
@@ -96,40 +92,14 @@ public class Utils {
         call = okHttpClient.newCall(request);
         Response response = null;
         try {
-            if (!threadRunning) {
-                return false;
-            }
             response = call.execute();
-            return true;
+            Log.i("CÓDIGO DE RESPUESTA", String.valueOf(response.code()));
+            return response.code();
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+            Log.e("ENVÍO DE ARCHIVO", "EL ARCHIVO NO SE SUBIÓ PORQUE SE REINICIÓ EL SERVICIO");
+            return -1;
         }
-    }
-
-    //VERIFICAR SI HAY ESPACIO EN LA MEMORIA EXTERNA
-    public static boolean getAvailableExternalMemorySize() {
-        if (externalMemoryAvailable()) {
-            File path = Environment.getExternalStorageDirectory();
-            StatFs stat = new StatFs(path.getPath());
-            long blockSize = stat.getBlockSize();
-            long availableBlocks = stat.getAvailableBlocks();
-            long size = availableBlocks * blockSize;
-            Log.i("utils", "Available size in bytes: " + size);
-            if (size < 10485760){ //10MB
-                return false;
-            }else{
-                return true;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    //RETORNAR LA MEMORIA EXTERNA
-    private static boolean externalMemoryAvailable() {
-        return android.os.Environment.getExternalStorageState().equals(
-                android.os.Environment.MEDIA_MOUNTED);
     }
 
 }

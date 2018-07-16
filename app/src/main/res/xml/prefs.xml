@@ -4,36 +4,29 @@
     <EditTextPreference
         android:key="numberOfIntents"
         android:title="Number of intents"
-        android:summary="EditText to manage the number of intents to send an audio to the server"
+        android:summary="Número de veces que se intenta subir un archivo antes de la siguiente ejecución"
         android:enabled="true"
         android:defaultValue="3" />
 
     <EditTextPreference
-        android:key="sendingAudioTime"
-        android:title="Sending audio time"
-        android:summary="amount of time in which the service is running and sending audios"
+        android:key="timeBetweenIntents"
+        android:title="Time between intents"
+        android:summary="Tiempo de espera entre cada intento de subida de un archivo"
         android:enabled="true"
-        android:defaultValue="180" />
+        android:defaultValue="15" />
 
     <EditTextPreference
         android:key="sleepTime"
         android:title="Sleep time"
-        android:summary="Tiempo que espera el servicio para volver a ejecutarse"
+        android:summary="Tiempo de espera del servicio entre cada ejecución"
         android:enabled="true"
-        android:defaultValue="420" />
-
-    <CheckBoxPreference
-        android:key="isOnService"
-        android:title="Is Service running"
-        android:enabled="true"
-        android:summary="checkbox to turn off or on the service of sending audios to the server"
-        android:defaultValue="true" />
+        android:defaultValue="240" />
 
     <CheckBoxPreference
         android:key="onDestroyAudio"
-        android:title="Delete files after they go to server"
+        android:title="Destroy Audio"
         android:enabled="true"
-        android:summary="checkbox to enable/disable the deleting of files after they go to the server"
+        android:summary="Borrar archivo después de enviarse al servidor"
         android:defaultValue="true" />
 
 </PreferenceScreen>

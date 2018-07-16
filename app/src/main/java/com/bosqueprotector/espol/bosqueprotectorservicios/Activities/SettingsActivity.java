@@ -11,15 +11,15 @@ import android.util.Log;
 
 import com.bosqueprotector.espol.bosqueprotectorservicios.R;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Services.SendingAudiosService;
+import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.FolderIterator;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers;
 
-import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SENDING_AUDIO_TIME;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SLEEP_TIME;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.call;
+
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.setPreferencesApplications;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.alarmManager;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.pendingIntent;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.threadRunning;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -30,25 +30,30 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         EditTextPreference APIKey_preference = new EditTextPreference(SettingsActivity.this);
         APIKey_preference.setKey("APIKey");
         APIKey_preference.setTitle("APIKey");
-        APIKey_preference.setSummary("Key to authenticate the station in the server");
+        APIKey_preference.setSummary(Identifiers.APIKey);
         APIKey_preference.setDefaultValue(Identifiers.APIKey);
         APIKey_preference.setOrder(0);
+        APIKey_preference.setEnabled(false);
         getPreferenceScreen().addPreference(APIKey_preference);
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
     //LISTENER QUE DETECTA CAMBIOS EN LAS PREFERENCIAS
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.d("METODO CHANGE", "CAMBIÓ LA CONFIGURACIÓN: " + key);
-        if (key.equals("sleepTime") || key.equals("sendingAudioTime")) {
-            Log.d("METODO CHANGE", "ENTRÓ");
-            threadRunning = false;
+        Log.i("METODO CHANGE", "CAMBIÓ LA CONFIGURACIÓN: " + key);
+        if (key.equals("sleepTime")) {
+            FolderIterator.threadRunning = false;
             call.cancel();
+            Log.i("HILO", "HILO SETTINGS: " + Thread.currentThread().getId());
+            SendingAudiosService.thread.interrupt();
+            alarmManager.cancel(pendingIntent);
+            call.cancel();
+            SendingAudiosService.thread.interrupt();
             stopService(new Intent(this, SendingAudiosService.class));
             setPreferencesApplications(getApplicationContext());
             alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 1000,
-                    SLEEP_TIME + SENDING_AUDIO_TIME , pendingIntent);
-            Log.d("ALARMA", "ALARMA CAMBIADA");
+                    SLEEP_TIME, pendingIntent);
+            Log.i("ALARMA", "ALARMA CAMBIADA");
         }
     }
 

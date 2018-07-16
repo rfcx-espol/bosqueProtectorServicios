@@ -1,7 +1,10 @@
 package com.bosqueprotector.espol.bosqueprotectorservicios.Services;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Binder;
 import android.os.Environment;
 import android.os.IBinder;
@@ -9,22 +12,25 @@ import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.FolderIterator;
+import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Utils;
+
 import java.io.File;
+import java.net.URL;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.URL_SERVER;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.setIdApplication;
+
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.NUMBER_OF_INTENTS;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.TIME_BETWEEN_INTENTS;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.setAPIKey;
+
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.setPreferencesApplications;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.threadRunning;
 
 public class SendingAudiosService extends Service {
-    private static final String TAG = SendingAudiosService.class.getSimpleName();
-    private static OkHttpClient okHttpClient = new OkHttpClient();
-
     private final IBinder mBinder = new LocalBinder();
     public static PowerManager.WakeLock wakeLock;
+    public static Thread thread;
 
     public class LocalBinder extends Binder {
         public SendingAudiosService getService() {
@@ -42,7 +48,6 @@ public class SendingAudiosService extends Service {
     @Override
     public void onCreate(){
         super.onCreate();
-        setIdApplication(getApplicationContext());
         setAPIKey(getApplicationContext());
         setPreferencesApplications(getApplicationContext());
 
@@ -56,7 +61,7 @@ public class SendingAudiosService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         startSendingAudiosHandler();
-        return Service.START_STICKY;
+        return Service.START_NOT_STICKY;
     }
 
     //DESTRUIR EL SERVICIO DE ENVÍO DE AUDIOS
@@ -66,33 +71,38 @@ public class SendingAudiosService extends Service {
         wakeLock.release();
     }
 
-    public void printImConnected(){
-        Log.i(TAG,"CONEXIÓN ESTABLECIDA" );
-    }
-
     //INICIO DEL SERVICIO DE ENVÍO DE AUDIOS
     public void startSendingAudiosHandler(){
-        Log.d("SERVICIO", "SERVICIO INICIADO");
-        threadRunning = true;
+        Log.i("SERVICIO", "SERVICIO INICIADO");
+        Log.i("HILO", "HILO SENDING: " + Thread.currentThread().getId());
         final Runnable r = new Runnable() {
             @Override
             public void run() {
-                builder();
-                FolderIterator folderIterator = new FolderIterator();
-                folderIterator.iteratingFolders(TAG,URL_SERVER, new File(Environment.getExternalStorageDirectory().getPath()+ "/audios/"),okHttpClient);
+                boolean res = false;
+                int intents = NUMBER_OF_INTENTS;
+                while(!res && intents > 0) {
+                    try {
+                        Log.i("INTENTOS RESTANTES: ", String.valueOf(intents));
+                        File dir = new File(Environment.getExternalStorageDirectory().getPath() + "/audios/");
+                        ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                        if (activeNetwork != null && activeNetwork.isConnected()) {
+                            FolderIterator folderIterator = new FolderIterator();
+                            res = folderIterator.iteratingFolders(dir);
+                        } else {
+                            Log.e("CONEXIÓN", "NO HAY CONEXIÓN A INTERNET");
+                        }
+                        if(!res)
+                            Thread.sleep(TIME_BETWEEN_INTENTS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    intents--;
+                }
             }
         };
-        Thread newThread = new Thread(r);
-        newThread.start();
-    }
-
-    //CREAR BUILDER DEL CLIENTE PARA QUE EXPIRE DESPUÉS DE 10 MINUTOS SIN CONEXIÓN
-    public static void builder(){
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.connectTimeout(10, TimeUnit.MINUTES)
-                .writeTimeout(10, TimeUnit.MINUTES)
-                .readTimeout(10, TimeUnit.MINUTES);
-        okHttpClient = builder.build();
+        thread = new Thread(r);
+        thread.start();
     }
 
 }

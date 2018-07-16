@@ -6,15 +6,11 @@
     <item
         android:id="@+id/prefs"
         android:orderInCategory="1"
-        android:title="@string/prefs"
-        />
+        android:title="@string/prefs" />
+
     <item
-        android:id="@+id/photos"
+        android:id="@+id/reboot"
         android:orderInCategory="2"
-        android:title="@string/photo" />
-    <item
-        android:id="@+id/sensors"
-        android:orderInCategory="3"
-        android:title="@string/sensors"
-        />
+        android:title="@string/reboot" />
+
 </menu>

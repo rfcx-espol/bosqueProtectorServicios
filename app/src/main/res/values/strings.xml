@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">bosqueProtectorServicios</string>
     <string name="prefs">Preferencias</string>
-    <string name="photo">photographies</string>
-    <string name="sensors">sensores</string>
+    <string name="reboot">Reinicio</string>
 </resources>

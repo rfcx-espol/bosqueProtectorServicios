@@ -1,88 +1,49 @@
 package com.bosqueprotector.espol.bosqueprotectorservicios.Utils;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
-
-import com.bosqueprotector.espol.bosqueprotectorservicios.Activities.MainActivity;
-
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
-
 import okhttp3.OkHttpClient;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.NUMBER_OF_INTENTS;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.ON_DESTROY_AUDIO;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SENDING_AUDIO_TIME;
-import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.threadRunning;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.URL_SERVER;
 
 public class FolderIterator {
-    private ArrayList<String> routesRecurred;
+    public static boolean threadRunning = true;
 
-    public FolderIterator() {
-        this.routesRecurred = new ArrayList<>();
-    }
+    public FolderIterator() {}
 
-    public FolderIterator(int counter, ArrayList<String> routesRecurred) {
-        this.routesRecurred = routesRecurred;
-    }
-
-    //ITERA EN LAS CARPETAS DE LA CARPETA AUDIOS
-    public void iteratingFolders(String TAG, String url, File dir, OkHttpClient okHttpClient) {
-        long captureTimeStamp = System.currentTimeMillis();
+    //ENVÍA EL ARCHIVO MÁS ANTIGUO
+    public boolean iteratingFolders(File dir) {
         if (dir.exists()) {
             File[] files = dir.listFiles();
-            Arrays.sort(files);
-            for (int i = 0; i < files.length; i++) {
-                File file = files[i];
-                Log.i(TAG, "este es el archivo : " + file.toString());
-                if (file.isDirectory()) {
-                    iteratingFolders(TAG, url, file, okHttpClient);
-                } else {
-                    if(!routesRecurred.contains(file.toString())){
-                        int intentsOfUpload = 0;
-                        while (intentsOfUpload < NUMBER_OF_INTENTS ){
-                            boolean respuesta = Utils.uploadFile(TAG, url, file, okHttpClient);
-                            if(!threadRunning) {
-                                Log.d("HILO", "HILO: " + Thread.currentThread().getId() + " ELIMINADO");
-                                return;
-                            }
-                            intentsOfUpload++;
-                            Log.i(TAG, "INTENTANDO SUBIR ARCHIVO "  + file.toString() + " ...");
-                            if (respuesta) {
-                                Log.i(TAG, "ARCHIVO SUBIDO EN INTENTO " + intentsOfUpload+ ": " + file.toString());
-                                this.routesRecurred.add(file.toString());
-                                if (ON_DESTROY_AUDIO ){
-                                    boolean isDeleted = file.delete();
-                                    if (isDeleted){
-                                        Log.i(TAG, "ARCHIVO BORRADO EXITOSAMENTE, HILO: " + Thread.currentThread().getId());
-                                    }else{
-                                        Log.e(TAG, "ARCHIVO NO BORRADO, HILO: " + Thread.currentThread().getId());
-                                    }
-                                }
-                                break;
-                            } else {
-                                Log.e(TAG, "ERROR AL SUBIR EL ARCHIVO " + file.toString());
-                                try {
-                                    Thread.sleep(30000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
+            if(files.length > 1) {
+                Arrays.sort(files);
+                OkHttpClient okHttpClient = new OkHttpClient();
+                File file = files[0];
+                Log.i("SUBIENDO ARCHIVO", file.toString());
+                Log.i("HILO", "HILO FOLDERS: " + Thread.currentThread().getId());
+                int respuesta = Utils.uploadFile(URL_SERVER, file, okHttpClient);
+                if(respuesta == 200) {
+                    //SI SE ENVIÓ EL AUDIO CORRECTAMENTE
+                    if (ON_DESTROY_AUDIO) {
+                        boolean isDeleted = file.delete();
+                        if (isDeleted) {
+                            Log.i("BORRADO", "ARCHIVO BORRADO EXITOSAMENTE");
+                        } else {
+                            Log.i("BORRADO", "ARCHIVO NO BORRADO");
                         }
                     }
+                    return true;
+                } else if(respuesta == -1) {
+                    //SI SE REINICIÓ EL SERVICIO Y EL ARCHIVO NO SE ENVIÓ SE ENVÍA TRUE PARA HACER
+                    //QUE EL HILO SE CIERRE SOLO
+                    return true;
                 }
+                return false;
             }
+            return false;
         }
-    }
-
-    public void directorios(File dir){
-        File[] files = dir.listFiles();
-        Arrays.sort(files);
-        for(int i = 0; i < files.length; i++){
-            File file = files[i];
-            Log.d("DIRECTORIOS: ", file.toString());
-        }
+        return false;
     }
 
 }
