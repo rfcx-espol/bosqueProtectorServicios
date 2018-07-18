@@ -72,7 +72,8 @@ public class MainActivity extends AppCompatActivity {
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (SendingAudiosService.class.getName().equals(service.service.getClassName())) {
                 alarmManager.cancel(pendingIntent);
-                call.cancel();
+                if(call != null)
+                    call.cancel();
                 SendingAudiosService.thread.interrupt();
                 stopService(intentAudioRecord);
                 break;

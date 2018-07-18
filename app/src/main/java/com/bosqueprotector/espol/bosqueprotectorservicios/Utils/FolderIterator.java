@@ -3,8 +3,11 @@ package com.bosqueprotector.espol.bosqueprotectorservicios.Utils;
 import android.util.Log;
 import java.io.File;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.ON_DESTROY_AUDIO;
+import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SLEEP_TIME;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.URL_SERVER;
 
 public class FolderIterator {
@@ -18,7 +21,11 @@ public class FolderIterator {
             File[] files = dir.listFiles();
             if(files.length > 1) {
                 Arrays.sort(files);
-                OkHttpClient okHttpClient = new OkHttpClient();
+                OkHttpClient.Builder builder = new OkHttpClient.Builder();
+                builder.connectTimeout(SLEEP_TIME, TimeUnit.SECONDS)
+                        .writeTimeout(SLEEP_TIME, TimeUnit.SECONDS)
+                        .readTimeout(SLEEP_TIME, TimeUnit.SECONDS);
+                OkHttpClient okHttpClient = builder.build();
                 File file = files[0];
                 Log.i("SUBIENDO ARCHIVO", file.toString());
                 Log.i("HILO", "HILO FOLDERS: " + Thread.currentThread().getId());

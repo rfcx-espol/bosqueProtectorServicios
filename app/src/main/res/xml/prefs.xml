@@ -20,7 +20,7 @@
         android:title="Sleep time"
         android:summary="Tiempo de espera del servicio entre cada ejecución"
         android:enabled="true"
-        android:defaultValue="240" />
+        android:defaultValue="420" />
 
     <CheckBoxPreference
         android:key="onDestroyAudio"
