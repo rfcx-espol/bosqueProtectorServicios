@@ -9,10 +9,9 @@ This app allows to send the audio files in the device to the server located in E
 
 ## Libraries
 
-The libraries used were:
+The library used was:
 
-**- JSONObject:** Library that allows to create JSON objects with the data that's going to be send to the server. <br/>
-**- OkHTTP:** This library is used to send the JSON object to the server.
+**- OkHttp v3.10.0:** This library is used to send the JSON object to the server.
 
 ## Directories
 
@@ -40,6 +39,8 @@ The repository has the following directory structure (Android setting files and 
     **- menu_main:** Contains the reboot and preferences options. <br/>
   - xml: <br/>
     **- prefs:** Allows to see and modify the preferences. <br/>
+    
+![Diagrama de interacción de clases](https://github.com/rfcx-espol/bosqueProtectorServicios/blob/master/Diagrama%20de%20interacción%20de%20clases.jpg)
     
 ## Preferences
 
