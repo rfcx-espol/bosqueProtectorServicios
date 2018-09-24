@@ -38,7 +38,8 @@ The repository has the following directory structure (Android setting files and 
   - menu: <br/>
     **- menu_main:** Contains the reboot and preferences options. <br/>
   - xml: <br/>
-    **- prefs:** Allows to see and modify the preferences. <br/>
+    **- prefs:** Allows to see and modify the preferences. <br/><br/>
+    
     
 ![Diagrama de interacción de clases](https://github.com/rfcx-espol/bosqueProtectorServicios/blob/master/Diagrama%20de%20interacción%20de%20clases.jpg)
     
