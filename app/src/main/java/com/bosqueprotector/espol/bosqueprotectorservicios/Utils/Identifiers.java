@@ -4,11 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
+import java.io.File;
 import java.util.Map;
 import okhttp3.Call;
 
@@ -27,12 +27,17 @@ public class Identifiers {
     public static boolean ON_DESTROY_AUDIO;
     //PREFERENCIAS DEL SERVICIO
     public static SharedPreferences PREFS_SETTINGS;
+    //BOOLEAN PARA SABER SI EL SERVICIO ESTÁ ACTIVO
     public static boolean onService = false;
+    //ALARMA GENERAL
     public static AlarmManager alarmManager;
+    //INTENT GENERAL
     public static PendingIntent pendingIntent;
     //public static boolean threadRunning = true;
+    //CALL GENERAL
     public static Call call;
-
+    //ARCHIVO LOG EN LA MEMORIA EXTERNA
+    public static File log;
     //DIRECCIÓN IP DEL SERVIDOR
     public static final String URL_SERVER ="http://200.126.14.250/File/UploadFile";
 

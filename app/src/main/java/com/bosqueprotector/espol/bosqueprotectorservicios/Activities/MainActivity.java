@@ -3,11 +3,9 @@ package com.bosqueprotector.espol.bosqueprotectorservicios.Activities;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.IBinder;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +16,11 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import com.bosqueprotector.espol.bosqueprotectorservicios.R;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Services.SendingAudiosService;
+import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers;
+import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Utils;
+
+import java.io.File;
+
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SLEEP_TIME;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.call;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.onService;
@@ -25,11 +28,7 @@ import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifie
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.alarmManager;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.pendingIntent;
 
-
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
-    SendingAudiosService senderAudio;
-    private boolean CONNECTION = true;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -40,6 +39,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //CREACIÓN DEL ARCHIVO LOG
+        if(Utils.externalMemoryAvailable() && Utils.isExternalStorageWritable() &&
+                Utils.getAvailableExternalMemorySize()) {
+            Identifiers.log = new File(Environment.getExternalStorageDirectory(), "Log - BosqueProtector.txt");
+            Log.i("INFO", "ARCHIVO LOG CREADO EN: " + Identifiers.log.getPath());
+            Utils.escribirEnLog("INFO - APLICACIÓN INICIADA");
+        }
 
         //INICIAR EL SERVICIO
         if(!onService) {
@@ -58,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
         if (alarmManager != null) {
             alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 1000,
                     SLEEP_TIME, pendingIntent);
-            Log.d("ALARMA", "ALARMA CREADA");
+            Log.i("INFO", "ALARMA CREADA");
+            Utils.escribirEnLog("INFO - ALARMA CREADA");
         }
         onService = true;
     }
@@ -81,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
         }
         createAlarm();
         Toast.makeText(this, "SERVICIO REINICIADO", Toast.LENGTH_SHORT).show();
+        Log.i("INFO", "SERVICIO REINICIADO");
+        Utils.escribirEnLog("INFO - SERVICIO REINICIADO");
     }
 
     @Override
