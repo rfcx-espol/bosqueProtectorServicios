@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.SystemClock;
 import android.util.Log;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Services.SendingAudiosService;
+import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Utils;
+
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SLEEP_TIME;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.onService;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.setPreferencesApplications;
@@ -29,7 +31,8 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
                 if (alarmManager != null) {
                     alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 1000,
                             SLEEP_TIME, pendingIntent);
-                    Log.d("ALARMA", "ALARMA CREADA DESPUÉS DE REINICIAR EL DISPOSITIVO");
+                    Utils.escribirEnLog("INFO - SERVICIO REINICIADO DESPUÉS DE REINICIAR EL DISPOSITIVO");
+                    Log.i("INFO", "SERVICIO REINICIADO DESPUÉS DE REINICIAR EL DISPOSITIVO");
                 }
                 onService = true;
             }

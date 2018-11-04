@@ -8,15 +8,12 @@ import android.os.SystemClock;
 import android.preference.EditTextPreference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
-
 import com.bosqueprotector.espol.bosqueprotectorservicios.R;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Services.SendingAudiosService;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.FolderIterator;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers;
-
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SLEEP_TIME;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.call;
-
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.setPreferencesApplications;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.alarmManager;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.pendingIntent;
@@ -40,11 +37,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     //LISTENER QUE DETECTA CAMBIOS EN LAS PREFERENCIAS
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.i("METODO CHANGE", "CAMBIÓ LA CONFIGURACIÓN: " + key);
         if (key.equals("sleepTime")) {
             FolderIterator.threadRunning = false;
             call.cancel();
-            Log.i("HILO", "HILO SETTINGS: " + Thread.currentThread().getId());
             SendingAudiosService.thread.interrupt();
             alarmManager.cancel(pendingIntent);
             call.cancel();
@@ -53,7 +48,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             setPreferencesApplications(getApplicationContext());
             alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 1000,
                     SLEEP_TIME, pendingIntent);
-            Log.i("ALARMA", "ALARMA CAMBIADA");
         }
     }
 

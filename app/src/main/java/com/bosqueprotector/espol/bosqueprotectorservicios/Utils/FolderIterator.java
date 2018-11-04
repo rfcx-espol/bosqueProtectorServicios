@@ -4,7 +4,6 @@ import android.util.Log;
 import java.io.File;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
-
 import okhttp3.OkHttpClient;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.ON_DESTROY_AUDIO;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SLEEP_TIME;
@@ -27,17 +26,20 @@ public class FolderIterator {
                         .readTimeout(SLEEP_TIME, TimeUnit.SECONDS);
                 OkHttpClient okHttpClient = builder.build();
                 File file = files[0];
-                Log.i("SUBIENDO ARCHIVO", file.toString());
-                Log.i("HILO", "HILO FOLDERS: " + Thread.currentThread().getId());
+                Log.i("INFO", "INICIO DE ENVÍO DE ARCHIVO: " + file.toString());
+                Utils.escribirEnLog("INFO - INICIO DE ENVÍO DE ARCHIVO");
                 int respuesta = Utils.uploadFile(URL_SERVER, file, okHttpClient);
                 if(respuesta == 200) {
                     //SI SE ENVIÓ EL AUDIO CORRECTAMENTE
+                    Utils.escribirEnLog("INFO - ARCHIVO ENVIADO EXITOSAMENTE");
                     if (ON_DESTROY_AUDIO) {
                         boolean isDeleted = file.delete();
                         if (isDeleted) {
-                            Log.i("BORRADO", "ARCHIVO BORRADO EXITOSAMENTE");
+                            Log.i("INFO", "ARCHIVO BORRADO DEL DISPOSITIVO");
+                            Utils.escribirEnLog("INFO - ARCHIVO BORRADO DEL DISPOSITIVO");
                         } else {
-                            Log.i("BORRADO", "ARCHIVO NO BORRADO");
+                            Log.i("INFO", "ARCHIVO NO BORRADO");
+                            Utils.escribirEnLog("INFO - ARCHIVO NO BORRADO");
                         }
                     }
                     return true;
