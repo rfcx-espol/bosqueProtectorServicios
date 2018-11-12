@@ -71,28 +71,31 @@ public class SendingAudiosService extends Service {
         final Runnable r = new Runnable() {
             @Override
             public void run() {
-                boolean res = false;
+                int res = 0;
                 int intents = NUMBER_OF_INTENTS;
-                while(!res && intents > 0) {
+                while(res == 0 && intents > 0) {
                     try {
                         File dir = new File(Environment.getExternalStorageDirectory().getPath() + "/audios/");
                         ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
                         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                        intents--;
                         if (activeNetwork != null && activeNetwork.isConnected()) {
+                            Log.i("INFO", "CONEXIÓN ESTABLECIDA DESPUÉS DE: " + (3 - intents) + " INTENTO(S)");
+                            Utils.escribirEnLog("INFO - CONEXIÓN ESTABLECIDA DESPUÉS DE: " + (3 - intents) + " INTENTO(S)");
                             FolderIterator folderIterator = new FolderIterator();
                             res = folderIterator.iteratingFolders(dir);
+                            if(res == 0 || res == 3)
+                                Thread.sleep(TIME_BETWEEN_INTENTS);
+                        } else {
+                            if(intents == 0) {
+                                Log.e("ERROR", "NO HAY CONEXIÓN A INTERNET. SE ESPERARÁ AL SIGUIENTE ENVÍO");
+                                Utils.escribirEnLog("ERROR - NO HAY CONEXIÓN A INTERNET. SE ESPERARÁ AL SIGUIENTE ENVÍO");
+                            }
                         }
-                        if(!res)
-                            Thread.sleep(TIME_BETWEEN_INTENTS);
                     } catch (InterruptedException e) {
                         Utils.escribirEnLog("ERROR - " + e.getMessage());
                         e.printStackTrace();
                     }
-                    intents--;
-                }
-                if(!res) {
-                    Log.e("ERROR", "NO HAY CONEXIÓN A INTERNET");
-                    Utils.escribirEnLog("ERROR - NO HAY CONEXIÓN A INTERNET. SE ESPERARÁ AL SIGUIENTE ENVÍO");
                 }
             }
         };
