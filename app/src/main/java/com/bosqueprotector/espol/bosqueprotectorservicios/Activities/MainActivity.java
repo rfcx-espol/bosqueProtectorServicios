@@ -5,7 +5,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Environment;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -16,10 +15,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import com.bosqueprotector.espol.bosqueprotectorservicios.R;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Services.SendingAudiosService;
-import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers;
 import com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Utils;
-
-import java.io.File;
 
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.SLEEP_TIME;
 import static com.bosqueprotector.espol.bosqueprotectorservicios.Utils.Identifiers.call;
@@ -41,12 +37,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //CREACIÓN DEL ARCHIVO LOG
-        if(Utils.externalMemoryAvailable() && Utils.isExternalStorageWritable() &&
-                Utils.getAvailableExternalMemorySize()) {
-            Identifiers.log = new File(Environment.getExternalStorageDirectory(), "Log - BosqueProtector.txt");
-            Log.i("INFO", "ARCHIVO LOG CREADO EN: " + Identifiers.log.getPath());
-            Utils.escribirEnLog("INFO - APLICACIÓN INICIADA");
-        }
+        if(Utils.crearLog())
+            Log.e("ERROR", "NO SE PUDO CREAR EL ARCHIVO LOG");
+        else
+            Log.i("INFO", "ARCHIVO LOG CREADO EXITOSAMENTE");
 
         //INICIAR EL SERVICIO
         if(!onService) {

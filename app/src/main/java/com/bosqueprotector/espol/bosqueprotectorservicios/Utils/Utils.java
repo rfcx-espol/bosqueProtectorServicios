@@ -54,6 +54,8 @@ public class Utils {
                 JSONObject obj = new JSONObject(response.body().string());
                 if(obj.getString("APIKey").equals(Identifiers.APIKey)){
                     Identifiers.ID_STATION = obj.getString("Id");
+                    Log.i("INFO", "APIKEY OBTENIDA EXITOSAMENTE");
+                    Utils.escribirEnLog("INFO - APIKEY OBTENIDA EXITOSAMENTE");
                     response.body().close();
                     return true;
                 }
@@ -90,8 +92,10 @@ public class Utils {
                 .url(url)
                 .post(requestBody)
                 .build();
+        Log.i("INFO", "INICIO DE ENVÍO DE ARCHIVO: " + file.toString());
+        Utils.escribirEnLog("INFO - INICIO DE ENVÍO DE ARCHIVO: " + file.toString());
         call = okHttpClient.newCall(request);
-        Response response = null;
+        Response response;
         try {
             response = call.execute();
             Log.i("CÓDIGO DE RESPUESTA: ", String.valueOf(response.code()));
@@ -148,10 +152,26 @@ public class Utils {
                 fos.close();
             }
         } catch (FileNotFoundException e) {
+            Log.e("ERROR", "EL ARCHIVO LOG NO EXISTE");
+            if(Utils.crearLog())
+                Log.e("ERROR", "NO SE PUDO CREAR EL ARCHIVO LOG");
+            else
+                Log.i("INFO", "ARCHIVO LOG CREADO EXITOSAMENTE");
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean crearLog(){
+        if(Utils.externalMemoryAvailable() && Utils.isExternalStorageWritable() &&
+                Utils.getAvailableExternalMemorySize()) {
+            Identifiers.log = new File(Environment.getExternalStorageDirectory(), "Log - BosqueProtector.txt");
+            Log.i("INFO", "ARCHIVO LOG CREADO EN: " + Identifiers.log.getPath());
+            Utils.escribirEnLog("INFO - APLICACIÓN INICIADA");
+            return false;
+        }
+        return true;
     }
 
 }
