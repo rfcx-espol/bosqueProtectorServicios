@@ -24,6 +24,7 @@ The repository has the following directory structure (Android setting files and 
     **- SettingsActivity:** Starts the preference menu and detect the preferences' changes made by the user. <br/>
   - BroadcastReceivers: <br/>
     **- BootBroadcastReceiver:** Starts the service after the device's restart. <br/>
+    **- BatteryLevelReceiver:** Detects when the battery's level is too low or it's restored to an acceptable level after being low. <br/>
   - Services: <br/>
     **- SendingAudiosService:** Detects the internet connection and manage the upload intents. <br/>
   - Utils: <br/>
